@@ -42,4 +42,4 @@ Thumbs.db
 .idea/
 
 # sh脚本文件
-.sh
+*.sh
