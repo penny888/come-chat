@@ -6,35 +6,65 @@
 
 ```
 come-chat/
-├── backend/                # Node.js 后端服务
+├── .gitignore                        # Git 忽略规则
+├── README.MD                         # 项目说明
+│
+├── backend/                          # Node.js 后端服务
+│   ├── .env                          # 环境变量配置
+│   ├── package.json                  # Node 依赖与脚本
+│   ├── package-lock.json
+│   ├── data/
+│   │   └── app.db                    # SQLite 数据库文件
 │   ├── src/
-│   │   ├── app.js          # Express 入口
+│   │   ├── app.js                    # Express 应用入口
+│   │   ├── public/
+│   │   │   └── admin.css             # 管理后台样式
 │   │   ├── routes/
-│   │   │   ├── chat.js     # 聊天 API（流式 SSE）
-│   │   │   └── admin.js    # 知识库管理后台
+│   │   │   ├── chat.js               # 聊天 API（SSE 流式）
+│   │   │   └── admin.js              # 知识库管理后台 API
 │   │   ├── services/
-│   │   │   ├── langchainService.js   # DeepSeek 对话 + RAG
-│   │   │   └── embeddingService      # 文本向量化
-│   │   └── utils/
-│   │       ├── milvusClient.js       # Milvus 向量数据库
-│   │       └── sqliteDb.js           # SQLite 数据持久化
-│   ├── views/              # EJS 模板（管理后台页面）
-│   ├── uploads/            # 临时文件上传目录
-│   └── data/               # SQLite 数据库文件
-├── web/                    # React + TypeScript 前端
+│   │   │   ├── langchainService.js   # DeepSeek 对话 + RAG 逻辑
+│   │   │   └── embeddingService      # 文本 Embedding 向量化
+│   │   ├── utils/
+│   │   │   ├── milvusClient.js       # Milvus 向量数据库客户端
+│   │   │   └── sqliteDb.js           # SQLite 数据持久化
+│   │   └── views/                    # EJS 模板（管理后台页面）
+│   │       ├── layout.ejs            # 页面布局模板
+│   │       └── admin/
+│   │           ├── index.ejs         # 知识库管理主页
+│   │           └── upload.ejs        # 文档上传页面
+│   └── uploads/                      # 文件上传临时目录
+│
+├── web/                              # React + TypeScript 前端
+│   ├── package.json                  # 前端依赖与脚本
+│   ├── package-lock.json
+│   ├── tsconfig.json                 # TypeScript 配置
+│   ├── public/
+│   │   ├── index.html                # HTML 入口
+│   │   └── assets/
+│   │       └── logo.png              # 应用 Logo
 │   └── src/
-│       ├── App.tsx
+│       ├── index.tsx                 # React 挂载入口
+│       ├── App.tsx                   # 应用根组件
 │       ├── components/
-│       │   └── Chat.tsx    # 聊天主组件
+│       │   ├── Chat.tsx              # 聊天主组件
+│       │   └── Chat.css              # 聊天组件样式
 │       └── services/
-│           └── api.ts      # API 服务层
-└── mobile/                 # Flutter 移动端
+│           └── api.ts                # 后端 API 服务层
+│
+└── mobile/                           # Flutter 移动端
+    ├── pubspec.yaml                  # Flutter 项目配置
+    ├── pubspec.lock
+    ├── assets/
+    │   └── fonts/
+    │       ├── NotoSansSC-Regular.otf         # 中文字体
+    │       └── NotoSansSymbols-Regular.ttf    # 符号字体
     └── lib/
-        ├── main.dart
+        ├── main.dart                          # Flutter 入口
         ├── screens/
-        │   └── chat_screen.dart    # 聊天页面
+        │   └── chat_screen.dart               # 聊天页面
         └── services/
-            └── api_service.dart    # API 服务层
+            └── api_service.dart               # 后端 API 服务层
 ```
 
 ## 核心功能
@@ -77,6 +107,7 @@ npm install
 创建 `backend/.env` 文件：
 
 ```env
+# 后端运行端口
 PORT=3100
 
 # DeepSeek 大模型
@@ -92,6 +123,9 @@ MILVUS_ADDRESS=localhost:19530
 
 # SQLite 路径
 SQLITE_DB_PATH=./data/app.db
+
+# JWT秘钥
+JWT_SECRET=123456
 ```
 
 ### 3. 启动后端
